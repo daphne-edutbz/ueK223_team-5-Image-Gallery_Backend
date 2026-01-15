@@ -7,4 +7,6 @@ public interface UserService extends UserDetailsService, AbstractService<User> {
   User register(User user);
 
   User registerUser(User user);
+
+  User getCurrentUser();
 }

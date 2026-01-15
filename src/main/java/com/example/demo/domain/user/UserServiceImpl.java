@@ -4,6 +4,8 @@ import com.example.demo.core.generic.AbstractServiceImpl;
 import com.example.demo.domain.role.Role;
 import com.example.demo.domain.role.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +26,25 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
     this.passwordEncoder = passwordEncoder;
       this.roleService = roleService;
   }
+
+  @Override
+  public User getCurrentUser() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (authentication == null || !authentication.isAuthenticated()) {
+      throw new IllegalStateException("No authenticated user");
+    }
+
+    Object principal = authentication.getPrincipal();
+
+    if (principal instanceof UserDetailsImpl userDetails) {
+      return userDetails.user();
+    }
+
+    throw new IllegalStateException("Unexpected principal type");
+  }
+
+
 
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

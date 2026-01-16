@@ -10,7 +10,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import java.io.IOException;
 import java.util.Date;
-import java.util.Map;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,6 +21,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -42,8 +42,11 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
     byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecret());
 
     return Jwts.builder()
-               .setClaims(Map.of("sub", userDetailsImpl.user()
-                                                       .getId(), "authorities", userDetailsImpl.getAuthorities()))
+               .setSubject(userDetailsImpl.user().getId().toString())
+               .claim("authorities", userDetailsImpl.getAuthorities()
+                                                    .stream()
+                                                    .map(GrantedAuthority::getAuthority)
+                                                    .toList())
                .setIssuedAt(new Date())
                .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getExpirationMillis()))
                .setIssuer(jwtProperties.getIssuer())

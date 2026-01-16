@@ -67,6 +67,7 @@ VALUES -- ADMIN Role: User Management Rechte
        ('ab505c92-7280-49fd-a7de-258e618df074', '21c942db-a275-43f8-bdd6-d048c21bf5ab'), -- USER_DEACTIVATE
        ('ab505c92-7280-49fd-a7de-258e618df074', '3f8e901a-1234-4abc-9def-222222222222'), -- IMAGE_READ
        ('ab505c92-7280-49fd-a7de-258e618df074', '3f8e901a-1234-4abc-9def-444444444444'), -- IMAGE_DELETE (kann alle Posts löschen)
+       ('ab505c92-7280-49fd-a7de-258e618df074', '3f8e901a-1234-4abc-9def-333333333333'), -- IMAGE_MODIFY
 
        -- USER Role: Volle Image-Post Rechte (NEU!)
        ('c6aee32d-8c35-4481-8b3e-a876a39b0c02', '3f8e901a-1234-4abc-9def-111111111111'), -- IMAGE_CREATE

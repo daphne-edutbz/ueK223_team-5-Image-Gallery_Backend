@@ -1,19 +1,11 @@
 package com.example.demo.domain.imagepost.dto;
 
+import com.example.demo.core.generic.AbstractMapper;
 import com.example.demo.domain.imagepost.ImagePost;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.ReportingPolicy;
 
-@Component
-public class ImagePostMapper {
-
-    public ImagePostDTO toDTO(ImagePost post) {
-        return new ImagePostDTO(
-                post.getId(),
-                post.getImageUrl(),
-                post.getDescription(),
-                post.getAuthor().getId(),
-                post.getLikedBy().size(),
-                post.getCreatedAt()
-        );
-    }
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface ImagePostMapper extends AbstractMapper<ImagePost, ImagePostDTO> {
+    ImagePost fromCreateDTO(ImagePostCreateDTO dto);
 }

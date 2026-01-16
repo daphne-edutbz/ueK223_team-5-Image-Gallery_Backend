@@ -3,6 +3,7 @@ package com.example.demo.domain.imagepost;
 import com.example.demo.domain.imagepost.dto.ImagePostCreateDTO;
 import com.example.demo.domain.imagepost.dto.ImagePostDTO;
 import com.example.demo.domain.imagepost.dto.ImagePostMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public class ImagePostController {
     private final ImagePostService service;
     private final ImagePostMapper mapper;
 
-    public ImagePostController(ImagePostService service, ImagePostMapper mapper) {
+    public ImagePostController(ImagePostService service, @Qualifier("imagePostMapperImpl") ImagePostMapper mapper) {
         this.service = service;
         this.mapper = mapper;
     }
@@ -31,12 +32,12 @@ public class ImagePostController {
     public ResponseEntity<ImagePostDTO> create(
             @Validated @RequestBody ImagePostCreateDTO postDTO
     ) {
-        ImagePost post = new ImagePost().setImageUrl(postDTO.imageUrl()).setDescription(postDTO.description());
-
+        ImagePost post = mapper.fromCreateDTO(postDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDTO(service.create(post)));
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('IMAGE_READ')")
     public Page<ImagePostDTO> getAll(Pageable pageable) {
         return service.findAll(pageable).map(mapper::toDTO);
     }
@@ -44,8 +45,7 @@ public class ImagePostController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('IMAGE_MODIFY')")
     public ImagePostDTO update(@PathVariable UUID id, @RequestBody ImagePostCreateDTO postDTO) {
-        ImagePost post = new ImagePost().setImageUrl(postDTO.imageUrl()).setDescription(postDTO.description());
-
+        ImagePost post = mapper.fromCreateDTO(postDTO);
         return mapper.toDTO(service.update(id, post));
     }
 
@@ -57,8 +57,8 @@ public class ImagePostController {
     }
 
     @PostMapping("/{id}/like")
-    @PreAuthorize("hasAuthority('IMAGE_LIKE')")
-    public ImagePostDTO toggleLike(@PathVariable UUID id) {
+    @PreAuthorize("hasAuthority('LIKE_CREATE')")
+    public ImagePostDTO toggleLike(@PathVariable UUID id){
         return mapper.toDTO(service.toggleLike(id));
     }
 }

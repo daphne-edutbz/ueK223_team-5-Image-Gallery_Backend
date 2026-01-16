@@ -30,13 +30,13 @@ public class ImagePostServiceImpl implements ImagePostService {
 
     @Override
     public ImagePost update(UUID id, ImagePost updatedPost) {
-        ImagePost existing = repository.findById(id).orElse(null);
+        ImagePost existing = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Image post not found"));
         User currentUser = userService.getCurrentUser();
 
         boolean isAuthor = existing.getAuthor().getId().equals(currentUser.getId());
         boolean isAdmin = currentUser.getRoles().stream().anyMatch(role -> role.getName().equals("ADMIN"));
 
-        if (isAuthor && !isAdmin) {
+        if (!isAuthor && !isAdmin) {
             throw new AccessDeniedException("You do not have permission to update this post");
         }
 
@@ -47,13 +47,13 @@ public class ImagePostServiceImpl implements ImagePostService {
 
     @Override
     public void delete(UUID id) {
-        ImagePost post = repository.findById(id).orElse(null);
+        ImagePost post = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Image post not found"));
         User currentUser = userService.getCurrentUser();
 
         boolean isAuthor = post.getAuthor().getId().equals(currentUser.getId());
         boolean isAdmin = currentUser.getRoles().stream().anyMatch(role -> role.getName().equals("ADMIN"));
 
-        if (isAuthor && !isAdmin) {
+        if (!isAuthor && !isAdmin) {
             throw new AccessDeniedException("You do not have permission to delete this post");
         }
         repository.deleteById(id);
@@ -66,7 +66,7 @@ public class ImagePostServiceImpl implements ImagePostService {
 
     @Override
     public ImagePost toggleLike(UUID postId) {
-        ImagePost post = repository.findById(postId).orElse(null);
+        ImagePost post = repository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Image post not found"));
         User currentUser = userService.getCurrentUser();
         if (post.getAuthor().getId().equals(currentUser.getId())) {
             throw new IllegalStateException("Can't like own post");

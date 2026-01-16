@@ -24,8 +24,10 @@ ON CONFLICT DO NOTHING;
 
 --AUTHORITIES
 INSERT INTO authority(id, name)
-VALUES -- User Management Authorities('2ebf301e-6c61-4076-98e3-2a38b31daf86', 'USER_CREATE'),
-('76d2cbf6-5845-470e-ad5f-2edb9e09a868', 'USER_READ'),
+VALUES
+       -- User Management Authorities
+       ('2ebf301e-6c61-4076-98e3-2a38b31daf86', 'USER_CREATE'),
+       ('76d2cbf6-5845-470e-ad5f-2edb9e09a868', 'USER_READ'),
 ('21c942db-a275-43f8-bdd6-d048c21bf5ab', 'USER_DEACTIVATE'),
 
        -- Image Post Authorities (NEU!)

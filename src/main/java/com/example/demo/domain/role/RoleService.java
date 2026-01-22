@@ -2,6 +2,8 @@ package com.example.demo.domain.role;
 
 import com.example.demo.core.generic.AbstractService;
 
-
-public interface RoleService extends  AbstractService<Role> {
+/**
+ * Service-Interface für Rollen-Operationen.
+ */
+public interface RoleService extends AbstractService<Role> {
 }

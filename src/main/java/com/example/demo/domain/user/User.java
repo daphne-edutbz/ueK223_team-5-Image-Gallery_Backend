@@ -17,6 +17,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+/**
+ * Entity für Benutzer mit Profil, Credentials und Rollen.
+ */
 @Entity
 @Table(name = "users")
 @NoArgsConstructor

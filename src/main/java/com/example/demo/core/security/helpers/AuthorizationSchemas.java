@@ -1,6 +1,8 @@
 package com.example.demo.core.security.helpers;
 
-//As introduced in HTTP/1.0 https://www.rfc-editor.org/rfc/rfc1945
+/**
+ * HTTP Authorization-Schemas (RFC 1945).
+ */
 public enum AuthorizationSchemas {
   BASIC("Basic"), BEARER("Bearer"), DIGEST("Digest");
 

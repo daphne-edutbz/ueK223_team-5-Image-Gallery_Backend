@@ -5,8 +5,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+/**
+ * UserDetails-Implementierung für Spring Security.
+ * Wrappet User-Entity und extrahiert Authorities.
+ */
 public record UserDetailsImpl(User user) implements UserDetails {
 
+  /** Extrahiert Authorities aus User-Rollen */
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return user.getRoles()
@@ -17,11 +22,13 @@ public record UserDetailsImpl(User user) implements UserDetails {
                .toList();
   }
 
+  /** Gibt User-Passwort zurück */
   @Override
   public String getPassword() {
     return user.getPassword();
   }
 
+  /** Gibt E-Mail als Username zurück */
   @Override
   public String getUsername() {
     return user.getEmail();

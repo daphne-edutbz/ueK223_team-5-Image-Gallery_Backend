@@ -9,6 +9,9 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Map;
 
+/**
+ * Fehler-Response mit Timestamp und Error-Map.
+ */
 @NoArgsConstructor
 @Getter
 @Setter

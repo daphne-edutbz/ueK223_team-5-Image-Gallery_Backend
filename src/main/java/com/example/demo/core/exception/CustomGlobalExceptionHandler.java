@@ -18,10 +18,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * Globaler Exception-Handler für REST-API.
+ * Wandelt Exceptions in einheitliche ResponseError um.
+ */
 @RestControllerAdvice
 @AllArgsConstructor
 public class CustomGlobalExceptionHandler {
 
+  /** Behandelt Validierungsfehler */
   @ExceptionHandler(MethodArgumentNotValidException.class)
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ResponseError handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpServletRequest request) {
@@ -34,6 +39,7 @@ public class CustomGlobalExceptionHandler {
                               .build();
   }
 
+  /** Behandelt nicht gefundene Elemente */
   @ExceptionHandler({NoSuchElementException.class})
   @ResponseStatus(value = HttpStatus.NOT_FOUND)
   public ResponseError handleNoSuchElement() {
@@ -44,6 +50,7 @@ public class CustomGlobalExceptionHandler {
                               .build();
   }
 
+  /** Behandelt unbekannte Benutzer */
   @ExceptionHandler({UsernameNotFoundException.class})
   @ResponseStatus(value = HttpStatus.NOT_FOUND)
   public ResponseError handleUsernameNotFound(Throwable e) {
@@ -54,6 +61,7 @@ public class CustomGlobalExceptionHandler {
                               .build();
   }
 
+  /** Behandelt ungültige HTTP-Nachrichten */
   @ExceptionHandler({HttpMessageNotReadableException.class})
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ResponseError handleHttp(Throwable e) {
@@ -65,6 +73,7 @@ public class CustomGlobalExceptionHandler {
   }
 
 
+  /** Behandelt IO-Fehler */
   @ExceptionHandler({IOException.class})
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ResponseError handleIOException(Throwable e) {
@@ -75,6 +84,7 @@ public class CustomGlobalExceptionHandler {
                               .build();
   }
 
+  /** Behandelt Runtime-Exceptions */
   @ExceptionHandler({RuntimeException.class})
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ResponseError handleRuntimeException(Throwable e) {

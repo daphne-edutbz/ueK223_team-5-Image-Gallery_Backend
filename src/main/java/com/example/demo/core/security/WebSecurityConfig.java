@@ -22,6 +22,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+/**
+ * Spring Security Konfiguration.
+ * Definiert Filter-Chain, CORS, Authentifizierung und JWT-Filter.
+ */
 @Configuration
 @EnableMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
@@ -37,6 +41,7 @@ public class WebSecurityConfig {
     this.jwtProperties = jwtProperties;
   }
 
+  /** Konfiguriert Security-Filter mit JWT-Auth */
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     return http.authorizeHttpRequests(
@@ -53,6 +58,7 @@ public class WebSecurityConfig {
             .build();
   }
 
+  /** CORS-Konfiguration für Cross-Origin Requests */
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
@@ -65,6 +71,7 @@ public class WebSecurityConfig {
     return configurationSource;
   }
 
+  /** AuthenticationManager mit DAO-Provider */
   @Bean
   public AuthenticationManager authenticationManager() {
     DaoAuthenticationProvider provider = new DaoAuthenticationProvider();

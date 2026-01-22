@@ -20,6 +20,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * REST-Controller für User-Operationen.
+ * Verwaltet Registrierung, CRUD und Benutzerprofile.
+ */
 @Validated
 @RestController
 @RequestMapping("/user")
@@ -34,28 +38,33 @@ public class UserController {
     this.userMapper = userMapper;
   }
 
+  /** Holt einen User nach ID */
   @GetMapping("/{id}")
   public ResponseEntity<UserDTO> retrieveById(@PathVariable UUID id) {
     User user = userService.findById(id);
     return new ResponseEntity<>(userMapper.toDTO(user), HttpStatus.OK);
   }
 
+  /** Holt alle User */
   @GetMapping({"", "/"})
   public ResponseEntity<List<UserDTO>> retrieveAll() {
     List<User> users = userService.findAll();
     return new ResponseEntity<>(userMapper.toDTOs(users), HttpStatus.OK);
   }
 
+  /** Registriert einen neuen User mit Passwort */
   @PostMapping("/register")
   public ResponseEntity<UserDTO> register(@Valid @RequestBody UserRegisterDTO userRegisterDTO) {
     User user = userService.register(userMapper.fromUserRegisterDTO(userRegisterDTO));
     return new ResponseEntity<>(userMapper.toDTO(user), HttpStatus.CREATED);
   }
+  /** Registriert einen User ohne Passwort */
   @PostMapping("/registerUser")
   public ResponseEntity<UserDTO> registerWithoutPassword(@Valid @RequestBody UserDTO userDTO) {
     User user = userService.registerUser(userMapper.fromDTO(userDTO));
     return new ResponseEntity<>(userMapper.toDTO(user), HttpStatus.CREATED);
   }
+  /** Aktualisiert einen User */
   @PutMapping("/{id}")
   @PreAuthorize("hasAuthority('USER_MODIFY') && @userPermissionEvaluator.exampleEvaluator(authentication.principal.user,#id)")
   public ResponseEntity<UserDTO> updateById(@PathVariable UUID id, @Valid @RequestBody UserDTO userDTO) {
@@ -63,6 +72,7 @@ public class UserController {
     return new ResponseEntity<>(userMapper.toDTO(user), HttpStatus.OK);
   }
 
+  /** Löscht einen User */
   @DeleteMapping("/{id}")
   @PreAuthorize("hasAuthority('USER_DEACTIVATE')")
   public ResponseEntity<Void> deleteById(@PathVariable UUID id) {

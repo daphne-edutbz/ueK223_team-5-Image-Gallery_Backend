@@ -19,6 +19,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+/**
+ * Filter für JWT-Autorisierung.
+ * Validiert Token und setzt SecurityContext für jeden Request.
+ */
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
   private final UserService userService;
@@ -29,6 +33,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
     this.jwtProperties = jwtProperties;
   }
 
+  /** Extrahiert User-ID aus JWT-Token */
   private String resolveToken(String token) {
     if (token != null && token.startsWith(AuthorizationSchemas.BEARER.toString())) {
       byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecret());
@@ -43,6 +48,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
     }
   }
 
+  /** Setzt Authentication bei gültigem Token */
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {

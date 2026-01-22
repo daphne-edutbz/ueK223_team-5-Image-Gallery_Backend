@@ -11,6 +11,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+/**
+ * DTO für User-Daten ohne Passwort.
+ */
 @NoArgsConstructor
 @Getter
 @Setter

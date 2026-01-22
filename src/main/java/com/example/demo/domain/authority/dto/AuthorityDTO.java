@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+/**
+ * DTO für Authority-Daten.
+ */
 @NoArgsConstructor
 @Getter
 @Setter

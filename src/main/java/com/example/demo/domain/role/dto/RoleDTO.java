@@ -13,6 +13,9 @@ import lombok.experimental.Accessors;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * DTO für Rollen-Daten mit Berechtigungen.
+ */
 @NoArgsConstructor
 @Setter
 @Getter

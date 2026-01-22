@@ -9,18 +9,22 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+/**
+ * Implementierung des ImagePostService.
+ * Verwaltet CRUD und Like-Logik mit Berechtigungsprüfung.
+ */
 @Service
 public class ImagePostServiceImpl implements ImagePostService {
 
     private final ImagePostRepository repository;
     private final UserService userService;
 
-
     public ImagePostServiceImpl(ImagePostRepository repository, UserService userService) {
         this.repository = repository;
         this.userService = userService;
     }
 
+    /** {@inheritDoc} */
     @Override
     public ImagePost create(ImagePost post) {
         User currentUser = userService.getCurrentUser();
@@ -28,6 +32,7 @@ public class ImagePostServiceImpl implements ImagePostService {
         return repository.save(post);
     }
 
+    /** {@inheritDoc} Prüft Autor- oder Admin-Berechtigung */
     @Override
     public ImagePost update(UUID id, ImagePost updatedPost) {
         ImagePost existing = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Image post not found"));
@@ -45,6 +50,7 @@ public class ImagePostServiceImpl implements ImagePostService {
         return repository.save(existing);
     }
 
+    /** {@inheritDoc} Prüft Autor- oder Admin-Berechtigung */
     @Override
     public void delete(UUID id) {
         ImagePost post = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Image post not found"));
@@ -59,11 +65,13 @@ public class ImagePostServiceImpl implements ImagePostService {
         repository.deleteById(id);
     }
 
+    /** {@inheritDoc} */
     @Override
     public Page<ImagePost> findAll(Pageable pageable) {
         return repository.findAll(pageable);
     }
 
+    /** {@inheritDoc} Verhindert Like auf eigenen Post */
     @Override
     public ImagePost toggleLike(UUID postId) {
         ImagePost post = repository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Image post not found"));

@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import java.util.UUID;
 
+/**
+ * Basis-DTO mit UUID. Alle DTOs erben von dieser Klasse.
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

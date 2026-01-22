@@ -5,6 +5,9 @@ import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Implementierung des RoleService.
+ */
 @Getter@Setter
 @Service
 public class RoleServiceImpl extends AbstractServiceImpl<Role> implements RoleService {

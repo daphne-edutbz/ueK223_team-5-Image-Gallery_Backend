@@ -17,6 +17,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+/**
+ * Entity für Benutzerrollen (z.B. ADMIN, USER) mit zugehörigen Berechtigungen.
+ */
 @Entity
 @Table(name = "role")
 @NoArgsConstructor

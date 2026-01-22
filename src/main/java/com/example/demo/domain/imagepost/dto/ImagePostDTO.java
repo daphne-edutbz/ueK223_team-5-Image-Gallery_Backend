@@ -9,6 +9,9 @@ import lombok.experimental.Accessors;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * DTO für ImagePost-Daten inkl. Like-Count.
+ */
 @NoArgsConstructor
 @Getter
 @Setter

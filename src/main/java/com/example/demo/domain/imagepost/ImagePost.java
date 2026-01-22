@@ -13,6 +13,9 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Entity für Bild-Posts mit URL, Beschreibung, Autor und Likes.
+ */
 @Entity
 @Table(name = "image_posts")
 @NoArgsConstructor

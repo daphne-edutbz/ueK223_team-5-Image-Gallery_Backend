@@ -7,8 +7,12 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+/**
+ * Repository für User-Datenbankoperationen.
+ */
 @Repository
 public interface UserRepository extends AbstractRepository<User> {
-  Optional<User> findByEmail(String email);
 
+  /** Findet User nach E-Mail-Adresse */
+  Optional<User> findByEmail(String email);
 }

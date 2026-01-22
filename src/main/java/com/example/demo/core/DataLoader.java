@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Initialisiert Test-Daten beim Applikationsstart.
+ */
 @Component
 public class DataLoader implements CommandLineRunner {
 
@@ -22,6 +25,7 @@ public class DataLoader implements CommandLineRunner {
         this.userRepository = userRepository;
     }
 
+    /** Lädt Test-ImagePosts falls DB leer */
     @Override
     public void run(String... args) {
         if (imagePostRepository.count() == 0) {
@@ -29,6 +33,7 @@ public class DataLoader implements CommandLineRunner {
         }
     }
 
+    /** Erstellt Test-ImagePosts für verschiedene User */
     private void loadImagePosts() {
         // Gianluca (Admin)
         createPost("ba804cb9-fa14-42a5-afaf-be488742fc54",
@@ -103,6 +108,7 @@ public class DataLoader implements CommandLineRunner {
         System.out.println("Loaded " + imagePostRepository.count() + " test image posts");
     }
 
+    /** Erstellt einzelnen Post mit zeitlichem Offset */
     private void createPost(String userId, String imageUrl, String description) {
         User user = userRepository.findById(UUID.fromString(userId)).orElse(null);
         if (user != null) {

@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+/**
+ * REST-Controller für ImagePost-Operationen.
+ * Verwaltet CRUD-Operationen und Like-Funktion für Bilder.
+ */
 @RestController
 @RequestMapping("/api/image-posts")
 @Validated
@@ -27,6 +31,7 @@ public class ImagePostController {
         this.mapper = mapper;
     }
 
+    /** Erstellt einen neuen ImagePost */
     @PostMapping
     @PreAuthorize("hasAuthority('IMAGE_CREATE')")
     public ResponseEntity<ImagePostDTO> create(
@@ -36,12 +41,14 @@ public class ImagePostController {
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDTO(service.create(post)));
     }
 
+    /** Holt alle ImagePosts paginiert */
     @GetMapping
     @PreAuthorize("hasAuthority('IMAGE_READ')")
     public Page<ImagePostDTO> getAll(Pageable pageable) {
         return service.findAll(pageable).map(mapper::toDTO);
     }
 
+    /** Aktualisiert einen ImagePost */
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('IMAGE_MODIFY')")
     public ImagePostDTO update(@PathVariable UUID id, @RequestBody ImagePostCreateDTO postDTO) {
@@ -49,6 +56,7 @@ public class ImagePostController {
         return mapper.toDTO(service.update(id, post));
     }
 
+    /** Löscht einen ImagePost */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('IMAGE_DELETE')")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
@@ -56,6 +64,7 @@ public class ImagePostController {
         return ResponseEntity.noContent().build();
     }
 
+    /** Toggled Like-Status für einen ImagePost */
     @PostMapping("/{id}/like")
     @PreAuthorize("hasAuthority('LIKE_CREATE')")
     public ImagePostDTO toggleLike(@PathVariable UUID id){

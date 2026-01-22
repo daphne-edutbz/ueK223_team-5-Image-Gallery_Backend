@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+/**
+ * Entity für Berechtigungen (z.B. IMAGE_READ, USER_MODIFY).
+ */
 @Entity
 @Table(name = "authority")
 @NoArgsConstructor

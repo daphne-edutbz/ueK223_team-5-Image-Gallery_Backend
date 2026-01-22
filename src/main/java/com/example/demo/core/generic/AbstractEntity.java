@@ -11,6 +11,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
+/**
+ * Basis-Entity mit UUID. Alle Entities erben von dieser Klasse.
+ */
 @MappedSuperclass
 @Getter
 @Setter

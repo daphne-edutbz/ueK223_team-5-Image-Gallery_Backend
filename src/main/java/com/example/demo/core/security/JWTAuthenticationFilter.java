@@ -26,6 +26,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
+/**
+ * Filter für JWT-Authentifizierung bei Login.
+ * Generiert JWT-Token bei erfolgreicher Anmeldung.
+ */
 @Log4j2
 public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
@@ -37,6 +41,7 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
     this.jwtProperties = jwtProperties;
   }
 
+  /** Generiert JWT-Token mit User-ID und Authorities */
   private String generateToken(Authentication authResult) {
     UserDetailsImpl userDetailsImpl = (UserDetailsImpl) authResult.getPrincipal();
     byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecret());
@@ -54,6 +59,7 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
                .compact();
   }
 
+  /** Versucht Authentifizierung mit E-Mail/Passwort */
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
       throws AuthenticationException {
@@ -68,12 +74,14 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
     }
   }
 
+  /** Fügt JWT-Token zum Response-Header hinzu */
   @Override
   protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
                                           Authentication authResult) throws IOException {
     response.addHeader(HttpHeaders.AUTHORIZATION, AuthorizationSchemas.BEARER + " " + generateToken(authResult));
   }
 
+  /** Setzt 401 Status bei fehlgeschlagener Authentifizierung */
   @Override
   protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             AuthenticationException failed) {

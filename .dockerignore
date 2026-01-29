@@ -1,0 +1,12 @@
+.git
+.gradle
+.gradle-local
+.gradle-user1
+.idea
+build
+node_modules
+postman
+cypress
+**/*.log
+**/.DS_Store
+**/Thumbs.db

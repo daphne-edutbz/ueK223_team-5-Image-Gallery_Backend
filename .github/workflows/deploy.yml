@@ -1,0 +1,71 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            set -e
+            mkdir -p ~/image-gallery
+            cd ~/image-gallery
+            if [ ! -f docker-compose.prod.yml ]; then
+              cat > docker-compose.prod.yml <<'EOF'
+            services:
+              db:
+                image: postgres:16
+                restart: unless-stopped
+                environment:
+                  POSTGRES_USER: postgres
+                  POSTGRES_PASSWORD: postgres
+                  POSTGRES_DB: postgres
+                ports:
+                  - "5432:5432"
+                volumes:
+                  - postgres_data:/var/lib/postgresql/data
+                healthcheck:
+                  test: ["CMD-SHELL", "pg_isready -U postgres"]
+                  interval: 10s
+                  timeout: 5s
+                  retries: 5
+
+              backend:
+                image: ${DOCKERHUB_USERNAME}/docker-backend:latest
+                restart: unless-stopped
+                environment:
+                  DB_HOST: db
+                  DB_PORT: 5432
+                  DB_NAME: postgres
+                  DB_USER: postgres
+                  DB_PASSWORD: postgres
+                ports:
+                  - "8911:8080"
+                depends_on:
+                  db:
+                    condition: service_healthy
+
+              frontend:
+                image: ${DOCKERHUB_USERNAME}/image-gallery-frontend:latest
+                restart: unless-stopped
+                ports:
+                  - "8910:80"
+                depends_on:
+                  - backend
+
+            volumes:
+              postgres_data:
+            EOF
+            fi
+
+            export DOCKERHUB_USERNAME="${{ secrets.DOCKERHUB_USERNAME }}"
+            docker compose -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.prod.yml up -d

@@ -33,6 +33,12 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/docker-backend:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/docker-backend:${{ github.sha }}
 
+      - name: Notify Discord (build)
+        if: ${{ success() && secrets.DISCORD_WEBHOOK_URL != '' }}
+        run: |
+          payload='{"content":"✅ Build succeeded for '${{ github.repository }}' @ '${{ github.sha }}'"}'
+          curl -s -H "Content-Type: application/json" -d "$payload" "${{ secrets.DISCORD_WEBHOOK_URL }}"
+
   deploy:
     runs-on: ubuntu-latest
     needs: build
